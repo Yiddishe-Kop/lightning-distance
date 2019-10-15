@@ -4,13 +4,13 @@
     <alert pill="life saving">Calculate your distance from the lightning</alert>
     <result
       title="Distance to Lightning"
-      :number="distanceToLightning"
+      :number="(distanceToLightning / 1000).toFixed(0)"
       :unit="unit == 'M' ? 'metres' : 'feet'"
       numberClass="distance"
     />
     <result
       title="Time since Lightning"
-      :number="time.sinceLightning"
+      :number="(time.sinceLightning / 1000).toFixed(2)"
       unit="seconds"
       numberClass="time"
     />
@@ -49,8 +49,7 @@ const SPEED_OF_SOUND = {
   M: 344,
   F: 1129
 };
-
-const UPDATE_INTERVAL = 12;
+const UPDATE_INTERVAL = 30;
 
 export default {
   name: "app",
@@ -86,16 +85,13 @@ export default {
   methods: {
     startTimer() {
       this.state = "timing";
-      this.time.lightning = new Date();
+      this.time.lightning = Date.now();
       this.time.intervalId = setInterval(() => {
-        this.time.sinceLightning = (
-          (this.time.sinceLightning * 1000 + UPDATE_INTERVAL) /
-          1000
-        ).toFixed(2);
+        this.time.sinceLightning = Date.now() - this.time.lightning;
       }, UPDATE_INTERVAL);
     },
     stopTimer() {
-      this.time.thunder = new Date();
+      this.time.thunder = Date.now();
       clearInterval(this.time.intervalId);
       this.state = "result";
     },
