@@ -22,5 +22,18 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.alert {
+  @apply mb-5 p-1 bg-pink-400 items-center justify-center text-pink-100 leading-none rounded-full inline-flex;
+  .alert-inner {
+    @apply p-2 bg-pink-200 items-center text-pink-600 leading-none rounded-full inline-flex;
+    .pill {
+      @apply flex rounded-full bg-pink-500 text-pink-100 uppercase px-2 py-1 text-xs font-bold mr-3;
+    }
+    .alert-text {
+      @apply font-semibold mr-2 flex-auto;
+      text-align: start;
+    }
+  }
+}
 </style>

@@ -1,38 +1,45 @@
 <template>
-  <div id="app">
+  <div id="app" :dir="lang == 'en' ? 'ltr' : 'rtl'">
     <logo />
-    <alert pill="life saving">Calculate your distance from the lightning</alert>
+    <alert
+      :pill="lang == 'en' ? 'life saving' : 'מציל חיים'"
+    >{{lang == 'en' ? 'Calculate your distance from the lightning' : 'חשב את המרחק שלך מהברקים' }}</alert>
     <result
-      title="Distance to Lightning"
+      :title="lang == 'en' ? 'Distance to Lightning' : 'מרחק לברקים'"
       :number="(distanceToLightning / 1000).toFixed(0)"
-      :unit="unit == 'M' ? 'metres' : 'feet'"
+      :unit="unit == 'M' ? (lang == 'en' ? 'metres' : 'מטר') : (lang == 'en' ? 'feet' : 'רגל')"
       numberClass="distance"
     />
     <result
-      title="Time since Lightning"
+      :title="lang == 'en' ? 'Time since Lightning' : 'זמן מאז הברק'"
       :number="(time.sinceLightning / 1000).toFixed(2)"
-      unit="seconds"
+      :unit="lang == 'en' ? 'seconds' : 'שניות'"
       numberClass="time"
     />
     <div class="py-5">
-      <button @click="handleClick" class="btn btn-cta">{{btnText[state]}}</button>
+      <button @click="handleClick" class="btn btn-cta">{{btnText[state][lang]}}</button>
     </div>
-    <alert pill="usage">
+    <alert :pill="lang == 'en' ? 'usage' : 'הוראות'">
       <ol class="list-decimal ml-3">
         <li>
-          Click the big button as soon as you see the
-          <strong>Lightning</strong>.
+          {{lang == 'en' ? 'Click the big button as soon as you see the' : 'לחץ על הכפתור הגדול ברגע שאתה רואה את '}}
+          <strong>{{lang == 'en' ? 'Lightning' : 'הברק'}}</strong>.
         </li>
         <li>
-          Click the big button again as soon as you hear the
-          <strong>Thunder</strong>.
+          {{lang == 'en' ? 'Click the big button again as soon as you hear the' : 'לחץ שוב על הכפתור הגדול ברגע שאתה שומע את ' }}
+          <strong>{{lang == 'en' ? 'Thunder' : 'הרעם' }}</strong>.
         </li>
-        <li>See results!</li>
+        <li>{{lang == 'en' ? 'See results!' : 'קבל תוצאה!' }}</li>
       </ol>
     </alert>
+    <div class="settings flex justify-center text-gray-500 mb-4">
+      {{lang == 'en' ? 'metres' : 'מטר' }}
+      <i-switch @change="toggleUnit" :is-on="unit == 'M'" class="mx-2" />
+      {{lang == 'en' ? 'feet' : 'רגל' }}
+    </div>
     <div class="settings flex justify-center text-gray-500">
-      metres
-      <i-switch @change="toggleUnit" :is-on="unit == 'M'" class="mx-2" />feet
+      עברית
+      <i-switch @change="toggleLang" :is-on="lang == 'he'" class="mx-2" />English
     </div>
   </div>
 </template>
@@ -49,6 +56,7 @@ const SPEED_OF_SOUND = {
   M: 344,
   F: 1129
 };
+
 const UPDATE_INTERVAL = 30;
 
 export default {
@@ -63,9 +71,18 @@ export default {
     return {
       state: "idle", // idle | timing | result
       btnText: {
-        idle: "⚡️ Lightning! ⚡️",
-        timing: "💥 Thunder! 💥",
-        result: "Reset"
+        idle: {
+          en: "⚡️ Lightning! ⚡️",
+          he: "⚡️ ברק! ⚡️"
+        },
+        timing: {
+          en: "💥 Thunder! 💥",
+          he: "💥 רעם! 💥"
+        },
+        result: {
+          en: "Reset",
+          he: "איפוס"
+        }
       },
       time: {
         lightning: 0,
@@ -73,7 +90,8 @@ export default {
         thunder: 0,
         intervalId: undefined
       },
-      unit: "M"
+      unit: "M",
+      lang: "he"
     };
   },
   computed: {
@@ -122,6 +140,13 @@ export default {
         this.unit = "F";
       } else {
         this.unit = "M";
+      }
+    },
+    toggleLang() {
+      if (this.lang == "en") {
+        this.lang = "he";
+      } else {
+        this.lang = "en";
       }
     }
   }
