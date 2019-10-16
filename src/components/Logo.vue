@@ -33,7 +33,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 svg {
   @apply mx-auto my-5;
   transition: all 0.2s ease;
