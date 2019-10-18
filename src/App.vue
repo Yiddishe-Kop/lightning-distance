@@ -17,7 +17,7 @@
       numberClass="time"
     />
     <div class="py-5">
-      <button @click="handleClick" class="btn btn-cta">{{btnText[state][lang]}}</button>
+      <button @click="handleClick" class="btn btn-cta my-12">{{btnText[state][lang]}}</button>
     </div>
     <alert :pill="lang == 'en' ? 'usage' : 'הוראות'">
       <ol class="list-decimal ml-3">
@@ -70,6 +70,11 @@ const SPEED_OF_SOUND = {
   F: 1129
 };
 
+const STATE = {
+  IDLE: 0,
+  RUNNING: 1,
+  RESULT: 2
+};
 const UPDATE_INTERVAL = 30;
 
 export default {
@@ -83,21 +88,21 @@ export default {
   },
   data() {
     return {
-      state: "idle", // idle | timing | result
-      btnText: {
-        idle: {
+      state: STATE.IDLE, // idle | timing | result
+      btnText: [
+        {
           en: "⚡️ Lightning! ⚡️",
           he: "⚡️ ברק! ⚡️"
         },
-        timing: {
+        {
           en: "💥 Thunder! 💥",
           he: "💥 רעם! 💥"
         },
-        result: {
+        {
           en: "Reset",
           he: "איפוס"
         }
-      },
+      ],
       time: {
         lightning: 0,
         sinceLightning: 0,
@@ -116,7 +121,7 @@ export default {
   },
   methods: {
     startTimer() {
-      this.state = "timing";
+      this.state = STATE.RUNNING;
       this.time.lightning = Date.now();
       this.time.intervalId = setInterval(() => {
         this.time.sinceLightning = Date.now() - this.time.lightning;
@@ -125,10 +130,10 @@ export default {
     stopTimer() {
       this.time.thunder = Date.now();
       clearInterval(this.time.intervalId);
-      this.state = "result";
+      this.state = STATE.RESULT;
     },
     reset() {
-      this.state = "idle";
+      this.state = STATE.IDLE;
       this.time = {
         lightning: 0,
         sinceLightning: 0,
@@ -138,13 +143,13 @@ export default {
     },
     handleClick() {
       switch (this.state) {
-        case "idle":
+        case STATE.IDLE:
           this.startTimer();
           break;
-        case "timing":
+        case STATE.RUNNING:
           this.stopTimer();
           break;
-        case "result":
+        case STATE.RESULT:
           this.reset();
           break;
       }
