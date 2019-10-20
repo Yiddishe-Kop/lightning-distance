@@ -62,10 +62,9 @@ import Logo from "./components/Logo.vue";
 import Alert from "./components/Alert.vue";
 import Result from "./components/Result.vue";
 import iSwitch from "./components/Switch.vue";
-import Icon from "./components/Icon.vue";
 
 // metres/second
-const SPEED_OF_LIGHT = 299792458;
+// const SPEED_OF_LIGHT = 299792458;
 const SPEED_OF_SOUND = {
   M: 344,
   F: 1129
@@ -84,8 +83,7 @@ export default {
     Logo,
     Alert,
     Result,
-    iSwitch,
-    Icon
+    iSwitch
   },
   data() {
     return {
