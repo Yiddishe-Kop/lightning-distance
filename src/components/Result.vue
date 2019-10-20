@@ -1,7 +1,7 @@
 <template>
   <div class="result">
     <div class="desc">{{title}}</div>
-    <div :class="[numberClass, color]" class="number">{{number}}</div>
+    <div :class="numberClass" class="number" :style="color">{{number}}</div>
     <span v-if="unit" class="pill">{{unit}}</span>
   </div>
 </template>
@@ -9,23 +9,22 @@
 <script>
 export default {
   name: "Result",
-  props: ["title", "number", "unit", "numberClass"],
+  props: ["title", "number", "unit", "numberClass", "distanceUnit"],
   computed: {
     color() {
       if (this.numberClass == "time") return null;
-      let color = "red-600";
-      if (this.number < 50) {
-        color = "red-600";
-      } else if (this.number < 150) {
-        color = "red-300";
-      } else if (this.number < 250) {
-        color = "green-300";
-      } else if (this.number < 400) {
-        color = "green-400";
-      } else {
-        color = "green-500";
-      }
-      return `bg-${color}`;
+      let hue = this.getTween(
+        this.number,
+        0,
+        100,
+        this.distanceUnit == "M" ? 2000.000064 : 6561.68
+      );
+      return `background-color: hsl(${hue < 336 ? hue : 335}, 100%, 61%);`;
+    }
+  },
+  methods: {
+    getTween(n, b, e, m) {
+      return b + (n / m) * (e - b);
     }
   }
 };

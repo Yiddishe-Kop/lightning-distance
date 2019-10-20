@@ -8,6 +8,7 @@
       :title="lang == 'en' ? 'Distance to Lightning' : 'מרחק לברקים'"
       :number="(distanceToLightning / 1000).toFixed(0)"
       :unit="unit == 'M' ? (lang == 'en' ? 'metres' : 'מטר') : (lang == 'en' ? 'feet' : 'רגל')"
+      :distanceUnit="unit"
       numberClass="distance"
     />
     <result
